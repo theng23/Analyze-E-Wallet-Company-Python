@@ -1,4 +1,5 @@
 # Data_Wrangling
+Please see the coding file attached or reach this link: [Data_Wrangling](https://colab.research.google.com/drive/18jfqAQUxfjQRU-8-3guUfHlovR9QKcV7#scrollTo=Ypzc_zE2QR0G)
 
 ## I. Introduction
 ### Business question:
@@ -24,7 +25,7 @@
     - Remained cases are invalid transactions
   - Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers.
 ### Dataset
-
+This is a file database in this topic: [**Dataset**](https://drive.google.com/drive/u/0/folders/1tj4H9FB1_t4GmTdPOSr4YOrU2RRPHurI)
 - Transaction: <br>
     | Field Name | Data Type |
     |-------|-------|
