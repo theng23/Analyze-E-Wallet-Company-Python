@@ -1,30 +1,15 @@
-# Data Wrangling Ewallet | Python, GoogleColab
+# 📊 Analyze E-Wallet Company | Python, GoogleColab
 Please see the coding file attached or reach this link: [Data_Wrangling](https://colab.research.google.com/drive/18jfqAQUxfjQRU-8-3guUfHlovR9QKcV7#scrollTo=Ypzc_zE2QR0G)
 
-## I. Introduction
-### Business question:
-1. **Exploratory Data Analyst**
-- Do EDA task:
-  - Df payment_enriched (Merge payment_report.csv with product.csv)
-  - Df transactions
+## 📑 I. Introduction
+### 📖 What is this project about?
+- E-Wallet company want to grasp information about status payment or transaction.
+- The key goal is a understand payment and transaction statuses to improve operational effciency, user experience and fraud detection.
+### ❓ Business Questions:
+  - Part 1: Exploratory Data Analysis (EDA) involves integrating and refining payment and product datasets, identifying and addressing missing values, duplicates, and inconsistent data types, while ensuring overall data integrity and reliability.
+  - Part 2: Data Wrangling involves refining and analyzing datasets to uncover valuable insights, such as recognizing high-performing products, assessing team efficiency, and categorizing different transaction types like refunds and transfers. The ultimate objective is to transform raw data into meaningful information that drives informed decision-making.
 
-2. **Data Wrangling**
-- Using payment_report.csv & product.csv
-  - Top 3 product_ids with the highest volume.
-  - Given that 1 product_id is only owed by 1 team, are there any abnormal products against this rule?
-  - Find the team has had the lowest performance (lowest volume) since Q2.2023. Find the category that contributes the least to that team.
-  - Find the contribution of source_ids of refund transactions (payment_group = ‘refund’), what is the source_id with the highest contribution?
-- Using transactions.csv
-  - Define type of transactions (‘transaction_type’) for each row, given:
-    - transType = 2 & merchant_id = 1205: Bank Transfer Transaction
-    - transType = 2 & merchant_id = 2260: Withdraw Money Transaction
-    - transType = 2 & merchant_id = 2270: Top Up Money Transaction
-    - transType = 2 & others merchant_id: Payment Transaction
-    - transType = 8, merchant_id = 2250: Transfer Money Transaction
-    - transType = 8 & others merchant_id: Split Bill Transaction
-    - Remained cases are invalid transactions
-  - Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers.
-### Dataset
+### 📂 Dataset
 This is a file database in this topic: [**Dataset**](https://drive.google.com/drive/u/0/folders/1tj4H9FB1_t4GmTdPOSr4YOrU2RRPHurI)
 - Transaction: <br>
     | Field Name | Data Type |
@@ -55,9 +40,31 @@ This is a file database in this topic: [**Dataset**](https://drive.google.com/dr
     |extra_info|STRING|
     |timeStamp|INT|
 
-## II. EDA and Wrangling
-### EDA
-1. Payment_Enriched
+#### 📌**Part 1: Exploratory Data Analyst**
+- Do EDA task:
+  - Df payment_enriched (Merge payment_report.csv with product.csv)
+  - Df transactions
+#### 📌**Part 2: Data Wrangling**
+- Using payment_report.csv & product.csv
+  - Top 3 product_ids with the highest volume.
+  - Given that 1 product_id is only owed by 1 team, are there any abnormal products against this rule?
+  - Find the team has had the lowest performance (lowest volume) since Q2.2023. Find the category that contributes the least to that team.
+  - Find the contribution of source_ids of refund transactions (payment_group = ‘refund’), what is the source_id with the highest contribution?
+- Using transactions.csv
+  - Define type of transactions (‘transaction_type’) for each row, given:
+    - transType = 2 & merchant_id = 1205: Bank Transfer Transaction
+    - transType = 2 & merchant_id = 2260: Withdraw Money Transaction
+    - transType = 2 & merchant_id = 2270: Top Up Money Transaction
+    - transType = 2 & others merchant_id: Payment Transaction
+    - transType = 8, merchant_id = 2250: Transfer Money Transaction
+    - transType = 8 & others merchant_id: Split Bill Transaction
+    - Remained cases are invalid transactions
+  - Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers.
+
+
+## ⚒️II. EDA and Wrangling
+### 📌EDA
+**1. Payment_Enriched**
 
 ```python
 payment_enriched = final_payment_report.merge(product, on='product_id', how = 'left')
@@ -89,7 +96,7 @@ duplicates_payment_enriched.head()
 
 ![0121f53d-7605-4719-ae3d-01b33f9cc122](https://github.com/user-attachments/assets/f1765502-b0fc-4837-aba1-eb26a5470f2d)
 
-2. Transactions
+**2. Transactions**
 
 ```python
 transactions = pd.read_csv('transactions.csv',encoding = 'utf-8')
@@ -124,20 +131,20 @@ no_dup_transactions.head()
 
 ![ac48a300-accc-482a-8e03-b7acce151ca5](https://github.com/user-attachments/assets/91500a7d-6f9a-4628-a61b-08418415b6ab)
 
-### Data Wrangling
+### 📌Data Wrangling
 
 ```python
 Data_wrangling = payment_report.merge(product, on='product_id', how = 'left')
 Data_wrangling.head()
 ```
-1. Top 3 product_id with the highest volumne
+**🔥 1. Top 3 product_id with the highest volumne**
 ```python
 Data_wrangling.groupby('product_id')['volume'].sum().sort_values(ascending=False).head(3)
 ```
 
 ![05d02963-acd5-4040-a676-f7cab41e7222](https://github.com/user-attachments/assets/18c121b9-b5f8-43be-aada-eec11ae8669f)
 
-2. Given that 1 product_id is only owed by 1 team, are there any abnormal products against this rule?
+**🔥 2. Given that 1 product_id is only owed by 1 team, are there any abnormal products against this rule?**
 ```python
 Data_wrangling['product_team_own'] = (
     Data_wrangling.groupby(['product_id','source_id'])['team_own'].transform('nunique')
@@ -153,7 +160,7 @@ Non_Team.groupby('product_id')['team_own'].nunique()
 ![efd32368-7e63-43a1-9a04-901055b7af09](https://github.com/user-attachments/assets/809a586f-dfa9-4f35-acac-5573617a1e52)
 
 
-3. Find the team has had the lowest performance (lowest volume) since Q2.2023. Find the category that contributes the least to that team.
+**🔥 3. Find the team has had the lowest performance (lowest volume) since Q2.2023. Find the category that contributes the least to that team.**
 ```python
 Data_wrangling[Data_wrangling['report_month'] >= '2023-04-01'].groupby(['team_own','category'])['volume'].sum().sort_values(ascending=True).head(1)
 ```
@@ -161,7 +168,7 @@ Data_wrangling[Data_wrangling['report_month'] >= '2023-04-01'].groupby(['team_ow
 
 
 
-4. Find the contribution of source_ids of refund transactions (payment_group = ‘refund’), what is the source_id with the highest contribution?
+**🔥 4. Find the contribution of source_ids of refund transactions (payment_group = ‘refund’), what is the source_id with the highest contribution?**
 
 ```python
 Data_wrangling[Data_wrangling['payment_group'] == 'refund'].groupby('source_id')['volume'].sum().sort_values(ascending=False).head(1)
@@ -170,7 +177,7 @@ Data_wrangling[Data_wrangling['payment_group'] == 'refund'].groupby('source_id')
 ![b35de446-52d5-4f46-b2e5-7663ee3e33d1](https://github.com/user-attachments/assets/2a4b2ed8-bb0e-488b-b1d4-ebf8e36665fd)
 
 
-5. Define type of transactions (‘transaction_type’) for each row, given:
+**🔥 5. Define type of transactions (‘transaction_type’) for each row, given:**
   - transType = 2 & merchant_id = 1205: Bank Transfer Transaction
   - transType = 2 & merchant_id = 2260: Withdraw Money Transaction
   - transType = 2 & merchant_id = 2270: Top Up Money Transaction
@@ -204,7 +211,7 @@ transactions.head()
 ![c7326ee8-92b0-40cf-b17f-0d985cab42ad](https://github.com/user-attachments/assets/0dc67985-a47b-4283-9504-551d5f8d3235)
 
 
-6. Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers.
+**6. Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers.**
 ```python
 transactions[transactions['Type'] != 'Invalid Transaction'].groupby('Type').agg({'transaction_id': 'count'
                                                                                 , 'volume': 'sum'
@@ -214,3 +221,9 @@ transactions[transactions['Type'] != 'Invalid Transaction'].groupby('Type').agg(
 
 
 ![9a6f7ae7-5077-483e-9e1f-58afdfe6e0f6](https://github.com/user-attachments/assets/ea5e957d-77a8-4cbd-9660-62f5b642f859)
+
+
+## 🔎 Conclusion
+✔️ The project focused on refining datasets through data wrangling—cleaning, transforming, and structuring them for meaningful analysis.\
+✔️ As a result, valuable insights were extracted regarding transaction volumes, product performance, and customer behavior within the E-wallet company.\
+✔️ These findings serve as a foundation for shaping business strategies and enhancing operational efficiency to drive future growth.
